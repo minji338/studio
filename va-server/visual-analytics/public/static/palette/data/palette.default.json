@@ -453,6 +453,10 @@
             {
                 "func": "brightics.function.transform$select_column74584",
                 "visible": false
+            },
+            {
+	            "func": "brightics.function.transform$join24484",
+    		    "visible": false
             }
         ]
     },
