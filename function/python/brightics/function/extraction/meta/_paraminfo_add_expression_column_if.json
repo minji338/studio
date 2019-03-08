@@ -1,0 +1,106 @@
+{    
+	"disableMDGenerator":true,
+	
+    "script": {
+        "type": "",
+        "content": ""
+    },
+    "specJson": {
+        "category": "extraction",
+        "func": "brightics.function.extraction$add_expression_column_if21398",
+        "name": "brightics.function.extraction$add_expression_column_if",
+        "context": "python",
+        "label": "Add Column",
+        "description": "This function generates a new column based on a given formula.",
+        "tags": [],
+        "version": "3.6",
+        "inputs": {
+            "table": ""
+        },
+        "outputs": {
+            "out_table": ""
+        },
+        "meta": {
+            "table": {
+                "type": "table"
+            },
+            "out_table": {
+                "type": "table"
+            }
+        },
+        "params": [
+           	{
+                "id": "new_col",
+                "label": "New Column Name",
+                "description": "Name of the new column to be added.",
+                "mandatory": true,
+                "items": [],
+                "visibleOption": [],
+                "control": "InputBox",
+                "columnType": [],
+                "validation": [],
+                "type": "String"
+            },
+            {
+                "id": "expr_type",
+                "label": "Expression Type",
+                "description": "",
+                "mandatory": false,
+                "items": [
+                    {
+                        "label": "SQLite",
+                        "value": "sqlite",
+                        "default": true
+                    },
+                    {
+                        "label": "Python",
+                        "value": "python",
+                        "default": false
+                    }
+                ],
+                "visibleOption": [],
+                "control": "RadioButton",
+                "columnType": [],
+                "validation": []
+            },
+           	{
+                "id": "conditions",
+                "label": "",
+                "description": "Condition Expressions.",
+                "mandatory": true,
+                "items": [],
+                "visibleOption": [],
+                "control": "InputBox",
+                "columnType": [],
+                "validation": [],
+                "type": "List of String"
+            },
+            {
+                "id": "values",
+                "label": "",
+                "description": "Values.",
+                "mandatory": true,
+                "items": [],
+                "visibleOption": [],
+                "control": "InputBox",
+                "columnType": [],
+                "validation": [],
+                "type": "List of String"
+            },
+            {
+                "id": "else_value",
+                "label": "",
+                "description": "Else value.",
+                "mandatory": true,
+                "items": [],
+                "visibleOption": [],
+                "control": "InputBox",
+                "columnType": [],
+                "validation": [],
+                "type": "String"
+            }
+            
+        ]
+    },
+    "md": ""
+}

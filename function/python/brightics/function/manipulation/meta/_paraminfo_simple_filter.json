@@ -1,17 +1,132 @@
-{
+{	
 	"disableMDGenerator":true,
+	"script": {
+        "type": "",
+        "content": ""
+    },
     "specJson": {
+        "category": "extraction",
         "func": "brightics.function.manipulation$simple_filter",
         "name": "brightics.function.manipulation$simple_filter",
+        "context": "python",
+        "label": "Filter",
+        "description": "This function generates a new column based on a given formula.",
+        "tags": [],
+        "version": "3.6",
+        "inputs": {
+            "table": ""
+        },
+        "outputs": {
+            "out_table": ""
+        },
+        "meta": {
+            "table": {
+                "type": "table"
+            },
+            "out_table": {
+                "type": "table"
+            }
+        },
         "params": [
-            {
-                "id": "input_cols",
-                "label": "Condition"
+        	{
+                "id": "main_operator",
+                "label": "Main Operator",
+                "description": "Main operators.",
+                "mandatory": false,
+                "items": [
+                    {
+                        "label": "And",
+                        "value": "and",
+                        "default": true
+                    },
+                    {
+                        "label": "Or",
+                        "value": "or",
+                        "default": false
+                    }
+                ],
+                "visibleOption": [],
+                "control": "RadioButton",
+                "columnType": [],
+                "validation": []
             },
             {
-                "id": "expr",
-                "label": "Condition"
+                "id": "input_cols",
+                "label": "Input Columns",
+                "description": "Columns.",
+                "mandatory": false,
+                "items": [],
+                "visibleOption": [],
+                "control": "InputBox",
+                "columnType": [],
+                "validation": [],
+                "type": "String"
+            },
+            {
+                "id": "operators",
+                "label": "Operators",
+                "description": "Operators.",
+                "mandatory": false,
+                "items": [
+                    {
+                        "label": "==",
+                        "value": "eq",
+                        "default": true
+                    },
+                    {
+                        "label": "!=",
+                        "value": "neq",
+                        "default": false
+                    },
+                    {
+                        "label": ">",
+                        "value": "g",
+                        "default": false
+                    },
+                    {
+                        "label": ">=",
+                        "value": "geq",
+                        "default": false
+                    },
+                    {
+                        "label": "<",
+                        "value": "l",
+                        "default": false
+                    },
+                    {
+                        "label": "<=",
+                        "value": "leq",
+                        "default": false
+                    },
+                    {
+                        "label": "in",
+                        "value": "in",
+                        "default": false
+                    },
+                    {
+                        "label": "not in",
+                        "value": "nin",
+                        "default": false
+                    }
+                ],
+                "visibleOption": [],
+                "control": "DropDownList",
+                "columnType": [],
+                "validation": []
+            },
+            {
+                "id": "operands",
+                "label": "Operands",
+                "description": "Operands.",
+                "mandatory": false,
+                "items": [],
+                "visibleOption": [],
+                "control": "InputBox",
+                "columnType": [],
+                "validation": [],
+                "type": "String"
             }
         ]
-    }
+	},
+	"md": ""    
 }
