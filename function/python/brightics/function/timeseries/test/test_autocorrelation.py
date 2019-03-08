@@ -1,7 +1,6 @@
 import unittest
 from brightics.common.datasets import load_iris
 from brightics.function.timeseries import autocorrelation
-import pandas
 
 
 class TestAutoCorrelation(unittest.TestCase):
