@@ -37,7 +37,7 @@ def _penalized_linear_regression_train(table, feature_cols, label_col, regressio
     features = out_table[feature_cols]
     label = out_table[label_col]
     if regression_type == 'ridge':
-        regression_model = Ridge(alpha=alpha, fit_intercept=fit_intercept, max_iter=None, tol=tol, solver='auto', random_state=random_state)
+        regression_model = Ridge(alpha=alpha, fit_intercept=fit_intercept, max_iter=max_iter, tol=tol, solver='auto', random_state=random_state)
     elif regression_type == 'lasso':
         regression_model = Lasso(alpha=alpha, fit_intercept=fit_intercept, max_iter=max_iter, tol=tol, random_state=random_state, selection='random')
     elif regression_type == 'elastic_net':
