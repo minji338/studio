@@ -1,6 +1,5 @@
 import unittest
 from brightics.common.datasets import load_iris
-#from brightics.function.transform import split_data
 from brightics.function.regression import decision_tree_regression_train, decision_tree_regression_predict
 
 
@@ -15,10 +14,6 @@ class TestDecisionTreeRegression(unittest.TestCase):
 
     def test_decision_tres_regression_train_predict(self):
         input_dataframe = self.iris
-        
-        # df_splitted = split_data(table=input_dataframe, train_ratio=7.0, test_ratio=3.0, random_state=1)
-        # train_df = df_splitted['train_table']
-        # test_df = df_splitted['test_table']
         
         res_train = decision_tree_regression_train(table=input_dataframe,
                                               feature_cols=['sepal_length', 'sepal_width', 'petal_length'], label_col='petal_width', random_state=12345)
