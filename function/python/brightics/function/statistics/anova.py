@@ -59,6 +59,7 @@ def _bartletts_test(table, response_cols, factor_col):
         
     return {'result': result}
 
+
 def oneway_anova(table, group_by=None, **params):
     check_required_parameters(_oneway_anova, params, ['table'])
     
@@ -80,7 +81,7 @@ def _oneway_anova(table, response_cols, factor_col):
     result = dict()
     result['_grouped_data'] = dict()
     
-    for response_col in response_cols:
+    for idx, response_col in enumerate(response_cols):
         data = table[response_col]
         result['_grouped_data'][response_col] = dict()
         
@@ -97,6 +98,7 @@ def _oneway_anova(table, response_cols, factor_col):
         anova = anova_lm(model)
         
         anova_df = pandasDF2MD(anova)
+        result['result{}'.format(idx)] = anova_df
         
         p_value = anova["""PR(>F)"""][0]
         
@@ -127,6 +129,7 @@ def _oneway_anova(table, response_cols, factor_col):
         
     result['_repr_brtc_'] = rb.get()
     return {'result': result}
+
 
 def tukeys_range_test(table, group_by=None, **params):
     check_required_parameters(_tukeys_range_test, params, ['table'])
