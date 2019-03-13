@@ -1,11 +1,7 @@
 package com.samsung.sds.brightics.agent.network;
 
 import com.samsung.sds.brightics.agent.network.listener.ReceiveMessageListener;
-import com.samsung.sds.brightics.agent.network.receiver.CommonReceiver;
-import com.samsung.sds.brightics.agent.network.receiver.DatabaseReceiver;
-import com.samsung.sds.brightics.agent.network.receiver.MetaDataReceiver;
-import com.samsung.sds.brightics.agent.network.receiver.StreamReceiver;
-import com.samsung.sds.brightics.agent.network.receiver.TaskReceiver;
+import com.samsung.sds.brightics.agent.network.receiver.*;
 import com.samsung.sds.brightics.common.network.NetworkContext;
 import com.samsung.sds.brightics.common.network.config.NetworkConfig;
 import com.samsung.sds.brightics.common.network.sender.MessageSender;
@@ -27,7 +23,7 @@ public class BrighticsNetworkManager {
                 .setCheckHeartbeat(true).setHeartbeatTime(1000).setTerminateListener(new TerminateListener()));
         server = context.createNetwork(new CommonReceiver()
                 , new TaskReceiver(listener), new StreamReceiver(listener), new MetaDataReceiver(listener)
-                , new DatabaseReceiver(listener));
+                , new DatabaseReceiver(listener), new DeeplearningReceiver(listener));
         server.start();
     }
 
@@ -38,7 +34,7 @@ public class BrighticsNetworkManager {
                 .setCheckHeartbeat(true).setHeartbeatTime(1000).setTerminateListener(new TerminateListener()));
         server = context.createNetwork(new CommonReceiver()
                 , new TaskReceiver(listener), new StreamReceiver(listener), new MetaDataReceiver(listener)
-                , new DatabaseReceiver(listener));
+                , new DatabaseReceiver(listener), new DeeplearningReceiver(listener));
         server.start();
     }
 

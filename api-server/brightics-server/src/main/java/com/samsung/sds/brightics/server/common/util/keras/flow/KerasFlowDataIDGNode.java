@@ -1,21 +1,16 @@
 package com.samsung.sds.brightics.server.common.util.keras.flow;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringJoiner;
-
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.samsung.sds.brightics.common.core.exception.BrighticsCoreException;
 import com.samsung.sds.brightics.server.common.util.keras.PythonScriptUtil;
 import com.samsung.sds.brightics.server.common.util.keras.model.KerasParameterConstant;
 import com.samsung.sds.brightics.server.common.util.keras.model.KerasParameters;
 import com.samsung.sds.brightics.server.common.util.keras.model.PythonTypes;
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.samsung.sds.brightics.common.core.exception.BrighticsCoreException;
+import java.util.*;
 
 public class KerasFlowDataIDGNode extends KerasFlowDataNode {
 

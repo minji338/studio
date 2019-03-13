@@ -1,9 +1,9 @@
 package com.samsung.sds.brightics.server.common.util.keras.flow;
 
-import java.util.Map;
-
 import com.google.gson.JsonObject;
 import com.samsung.sds.brightics.common.core.exception.BrighticsCoreException;
+
+import java.util.Map;
 
 public class KerasFlowOutputNode extends KerasFlowNode {
 

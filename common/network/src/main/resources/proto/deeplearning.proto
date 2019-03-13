@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_outer_classname = "DeeplearningProto";
+option java_multiple_files = true;
+
+import "google/protobuf/any.proto";
+import "common.proto";
+
+package com.samsung.sds.brightics.common.network.proto.deeplearning;
+
+message ExecuteDLMessage {
+    string user = 1;
+    string parameters = 2;
+    DLActionType actionType = 3;
+    enum DLActionType {
+        STATUS = 0;
+        BROWSE = 1;
+    };
+}
+
+message ResultDLMessage {
+    MessageStatus messageStatus = 1;
+    google.protobuf.Any result = 2;
+}
+
+service DeeplearningService {
+    rpc receiveDeeplearningInfo (ExecuteDLMessage) returns (ResultDLMessage) {}
+}

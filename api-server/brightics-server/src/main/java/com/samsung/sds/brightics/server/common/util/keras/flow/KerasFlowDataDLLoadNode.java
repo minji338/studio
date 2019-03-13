@@ -1,19 +1,15 @@
 package com.samsung.sds.brightics.server.common.util.keras.flow;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.samsung.sds.brightics.common.core.exception.BrighticsCoreException;
 import com.samsung.sds.brightics.server.common.util.keras.KerasScriptUtil;
 import com.samsung.sds.brightics.server.common.util.keras.PythonScriptUtil;
 import com.samsung.sds.brightics.server.common.util.keras.model.PythonTypes;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.gson.JsonObject;
-import com.samsung.sds.brightics.common.core.exception.BrighticsCoreException;
-import scala.annotation.meta.param;
-
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 
 public class KerasFlowDataDLLoadNode extends KerasFlowDataNode {
 
@@ -44,14 +40,14 @@ public class KerasFlowDataDLLoadNode extends KerasFlowDataNode {
 
     public LoadType getLoadType() {
         JsonElement loadTypeElem = param.get("loadType");
-        String loadType = "HDFS";
+        String loadTypeStr = "HDFS";
 
         if (loadTypeElem != null) {
-            loadType = loadTypeElem.getAsString().toUpperCase();
+        	loadTypeStr = loadTypeElem.getAsString().toUpperCase();
         }
 
-        if (EnumUtils.isValidEnum(LoadType.class, loadType)) {
-            return EnumUtils.getEnum(LoadType.class, loadType);
+        if (EnumUtils.isValidEnum(LoadType.class, loadTypeStr)) {
+            return EnumUtils.getEnum(LoadType.class, loadTypeStr);
         }
 
         return LoadType.HDFS;
@@ -59,7 +55,7 @@ public class KerasFlowDataDLLoadNode extends KerasFlowDataNode {
 
     public String getInputPath() {
         if (PythonScriptUtil.isJsonElementBlank(param.get("input_path"))) {
-            throw new BrighticsCoreException("4411", "DL Load activity", "Input Path");
+			throw new BrighticsCoreException("4411", "DL Load activity", "Input Path");
         }
 
         return param.get("input_path").getAsString();
@@ -94,16 +90,17 @@ enum LoadType {
     NPY {
         @Override
         void validate(JsonObject param) throws BrighticsCoreException {
+        	final String DL_LOAD_ACTIVITY = "DL Load activity";
             if (PythonScriptUtil.isJsonElementBlank(param.get("train_data_path"))) {
-                throw new BrighticsCoreException("4411", "DL Load activity", "Train Data");
+                throw new BrighticsCoreException("4411", DL_LOAD_ACTIVITY, "Train Data");
             }
 
             if (PythonScriptUtil.isJsonElementBlank(param.get("train_label_path"))) {
-                throw new BrighticsCoreException("4411", "DL Load activity", "Train Label");
+                throw new BrighticsCoreException("4411", DL_LOAD_ACTIVITY, "Train Label");
             }
 
             if (PythonScriptUtil.isJsonElementBlank(param.get("input_shape"))) {
-                throw new BrighticsCoreException("4411", "DL Load activity", "Input Shape");
+                throw new BrighticsCoreException("4411", DL_LOAD_ACTIVITY, "Input Shape");
             }
         }
 
@@ -140,20 +137,21 @@ enum LoadType {
     }, HDFS {
         @Override
         void validate(JsonObject param) throws BrighticsCoreException {
+        	final String DL_LOAD_ACTIVITY = "DL Load activity";
             if (PythonScriptUtil.isJsonElementBlank(param.get("input_path"))) {
-                throw new BrighticsCoreException("4411", "DL Load activity", "Input Path");
+                throw new BrighticsCoreException("4411", DL_LOAD_ACTIVITY, "Input Path");
             }
 
             if (PythonScriptUtil.isJsonElementBlank(param.get("train_data_column"))) {
-                throw new BrighticsCoreException("4411", "DL Load activity", "Train Data");
+                throw new BrighticsCoreException("4411", DL_LOAD_ACTIVITY, "Train Data");
             }
 
             if (PythonScriptUtil.isJsonElementBlank(param.get("train_label_column"))) {
-                throw new BrighticsCoreException("4411", "DL Load activity", "Train Label");
+                throw new BrighticsCoreException("4411", DL_LOAD_ACTIVITY, "Train Label");
             }
 
             if (PythonScriptUtil.isJsonElementBlank(param.get("input_shape"))) {
-                throw new BrighticsCoreException("4411", "DL Load activity", "Input Shape");
+                throw new BrighticsCoreException("4411", DL_LOAD_ACTIVITY, "Input Shape");
             }
         }
 

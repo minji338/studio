@@ -1,26 +1,20 @@
 package com.samsung.sds.brightics.server.service.repository;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.PostConstruct;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.samsung.sds.brightics.common.workflow.flowrunner.vo.JobStatusVO;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Repository for managing jobs.
@@ -44,7 +38,7 @@ public class JobRepository {
 	public static final String STATE_SUCCESS = "SUCCESS";
 	public static final String STATE_FAIL = "FAIL";
 	public static final String INVALID_JOBID_MESSAGE = "INVALID_JOBID";
-	public Map<String, List<String>> dlJobIdAsTaskid = new ConcurrentHashMap<>();
+	private static Map<String, List<String>> dlJobIdAsTaskid = new ConcurrentHashMap<>();
 	
 	private LoadingCache<String, JobStatusVO> jobStatusCache;
 	private static Map<String, JobStatusVO> jobStatusMap = new ConcurrentHashMap<String, JobStatusVO>();
@@ -70,6 +64,22 @@ public class JobRepository {
 				});
 	}
 
+	public boolean isContainDLJob(String jobId) {
+		return dlJobIdAsTaskid.containsKey(jobId);
+	}
+	
+	public List<String> getDLTaskIds(String jobId) {
+		return dlJobIdAsTaskid.get(jobId);
+	}
+
+	public void removeDLJob(String jobId) {
+		dlJobIdAsTaskid.remove(jobId);
+	}
+
+	public void saveDLTaskIdsAsJobId(String jobId, List<String> taskIds) {
+		dlJobIdAsTaskid.put(jobId, taskIds);
+	}
+	
 	public JobStatusVO getJobStatus(String jobId) {
 	    if(jobStatusMap.containsKey(jobId)){
 	        //job status is running.
@@ -80,8 +90,8 @@ public class JobRepository {
 	    }
 	}
 
-	public void saveJobStatus(String jobId, JobStatusVO jobStatusVO) {
-	    jobStatusMap.put(jobId, jobStatusVO);
+	public void saveJobStatus(String jobId, JobStatusVO jobStatusDTO) {
+	    jobStatusMap.put(jobId, jobStatusDTO);
 	}
 
 	//change job status to cache memory, remove thread.
@@ -102,21 +112,29 @@ public class JobRepository {
 		return jobStatusList;
 	}
 
-	public void insertJobStatusLog(JobStatusVO jobStatusVO, String agentId) {
+	public List<JobStatusVO> getJobRunningList() {
+		List<JobStatusVO> jobStatusList = new ArrayList<JobStatusVO>();
+		for (JobStatusVO jobStatus : jobStatusMap.values()) {
+			jobStatusList.add(jobStatus);
+		}
+		return jobStatusList;
+	}
+
+	public void insertJobStatusLog(JobStatusVO jobStatusDTO, String agentId) {
 
 		long currentTimeMillis = System.currentTimeMillis();
-		Date beginData = new Date(jobStatusVO.getBegin());
+		Date beginData = new Date(jobStatusDTO.getBegin());
 		Date endData = new Date(currentTimeMillis);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-		String result = jobStatusVO.getStatus();
-		if (jobStatusVO.getStatus().equals(STATE_SUCCESS)) {
+		String result = jobStatusDTO.getStatus();
+		if (jobStatusDTO.getStatus().equals(STATE_SUCCESS)) {
 			result = "SUCC";
 		}
 		String beginFormData = sdf.format(beginData);
 		String endFormData = sdf.format(endData);
-		long elapseMillis = currentTimeMillis - jobStatusVO.getBegin();
+		long elapseMillis = currentTimeMillis - jobStatusDTO.getBegin();
 		int elapseSec = (int) (elapseMillis / 1000);
-		String logInfo = "{\"jid\":\"" + jobStatusVO.getJobId() + "\" ,\"user\":\"" + jobStatusVO.getUser() + "\" ,\"agent\":\"" + agentId
+		String logInfo = "{\"jid\":\"" + jobStatusDTO.getJobId() + "\" ,\"user\":\"" + jobStatusDTO.getUser() + "\" ,\"agent\":\"" + agentId
 				+ "\" ,\"start\":\"" + beginFormData + "\" ,\"end\":\"" + endFormData + "\" ,\"elapse\":\"" + elapseSec
 				+ "\" ,\"result\":\"" + result + "\"}";
 

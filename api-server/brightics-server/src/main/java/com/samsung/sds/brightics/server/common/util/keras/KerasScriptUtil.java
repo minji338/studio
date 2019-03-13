@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import com.samsung.sds.brightics.common.core.exception.BrighticsCoreException;
 import com.samsung.sds.brightics.server.common.util.keras.model.KerasParameterConstant;
-import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.gson.JsonObject;
@@ -29,24 +29,24 @@ import com.typesafe.config.ConfigFactory;
 
 public class KerasScriptUtil {
 
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+    private static final String LINE_SEPARATOR = System.lineSeparator();
 
     private static final String LOG_DIR = "/log/";
     private static final String MODULES_DIR = "/modules/";
     private static final String CHECKPOINT_DIR = "/checkpoint/";
 
     public static String getDLHomePath() {
-        String DL_HOME = "/home/brightics/brightics/packages/dl";
+        String dlhome = "/home/ec2-user/brightics-studio/brightics-server/dl";
         Config configObject = ConfigFactory.load();
         try {
             if (configObject.getString("brightics.dl.repo.path") != null) {
-                DL_HOME = configObject.getString("brightics.dl.repo.path");
+                dlhome = configObject.getString("brightics.dl.repo.path");
             }
         } catch (Exception e) {
-            return DL_HOME;
+            return dlhome;
         }
 
-        return DL_HOME;
+        return dlhome;
     }
 
     public static String getKerasPredictScript(String outDFAlias, JsonObject param) {
@@ -127,7 +127,11 @@ public class KerasScriptUtil {
     }
 
     public static String makeFunctionalModelScript(KerasModelFlow modelFlowData) throws Exception {
-        StringJoiner script = new StringJoiner(LINE_SEPARATOR);
+        return makeFunctionalModelScript(modelFlowData, "");
+    }
+
+    public static String makeFunctionalModelScript(KerasModelFlow modelFlowData, String indent) throws Exception {
+        StringBuffer script = new StringBuffer();
 
         Set<String> visited = new HashSet<>();
         Stack<KerasFlowNode> stack = new Stack<>();
@@ -146,32 +150,33 @@ public class KerasScriptUtil {
                 visited.add(node.getFid());
 
                 if (node instanceof KerasFlowModelNode) {
-                    if (((KerasFlowModelNode) node).hasScript()) {
-                        script.add(((KerasFlowModelNode) node).getScript());
+                    KerasFlowModelNode modelNode = (KerasFlowModelNode) node;
+                    if (modelNode.hasScript()) {
+                        script.append(modelNode.getScript(indent)).append(LINE_SEPARATOR);
                     }
 
                     if (node instanceof KerasFlowLayerNode) {
                         KerasFlowLayerNode layerNode = (KerasFlowLayerNode) node;
 
                         if (layerNode.isFirstLayer()) {
-                            script.add(StringUtils.EMPTY);
+                            script.append(LINE_SEPARATOR);
 
                             String inputLayerName = layerNode.getInputLayerName();
 
                             if (layerNode.isApplications()) {
-                                script.add(String.format("%s = %s", inputLayerName, layerNode.getLayerScript(true)));
+                                script.append(indent).append(String.format("%s = %s", inputLayerName, layerNode.getLayerScript(true))).append(LINE_SEPARATOR);
                             } else {
-                                script.add(String.format("%s = Input(shape=%s, name=\"\"\"%s\"\"\")", inputLayerName, layerNode.getInputShape(), inputLayerName));
-                                script.add(String.format("%s = %s(%s)", layerNode.getVariableName(), layerNode.getLayerScript(), layerNode.getPrevVariableName()));
+                                script.append(indent).append(String.format("%s = Input(shape=%s, name=\"\"\"%s\"\"\")", inputLayerName, layerNode.getInputShape(), inputLayerName)).append(LINE_SEPARATOR);
+                                script.append(indent).append(String.format("%s = %s(%s)", layerNode.getVariableName(), layerNode.getLayerScript(), layerNode.getPrevVariableName())).append(LINE_SEPARATOR);
                             }
 
                             stack.addAll(getIndexedNextNodes(layerNode.getDataNode().getNextNodes(), layerNode));
                         } else {
                             if (layerNode.getNodeIndex() > 1) {
-                                script.add(StringUtils.EMPTY);
+                                script.append(LINE_SEPARATOR);
                             }
 
-                            script.add(String.format("%s = %s(%s)", layerNode.getVariableName(), layerNode.getLayerScript(), layerNode.getPrevVariableName()));
+                            script.append(indent).append(String.format("%s = %s(%s)", layerNode.getVariableName(), layerNode.getLayerScript(), layerNode.getPrevVariableName())).append(LINE_SEPARATOR);
                         }
                     }
                 }
@@ -182,8 +187,8 @@ public class KerasScriptUtil {
             }
         }
 
-        script.add(StringUtils.EMPTY);
-        script.add(makeModelDefineScript(modelFlowData.getOutputNodes()));
+        script.append(LINE_SEPARATOR);
+        script.append(indent).append(makeModelDefineScript(modelFlowData.getOutputNodes()));
 
         return script.toString();
     }
@@ -270,19 +275,28 @@ public class KerasScriptUtil {
     }
 
     public static String makeModelCompileScript(JsonObject args) throws Exception {
-        return String.format("model.compile(%s)",
+        return makeModelCompileScript(args, "");
+    }
+
+    public static String makeModelCompileScript(JsonObject args, String indent) throws Exception {
+        return String.format("%smodel.compile(%s)",
+                indent,
                 PythonScriptUtil.makePythonArgumentsString(
                         Arrays.asList(
                                 KerasParameterConstant.OPTIMIZER, KerasParameterConstant.LOSS)
-                                , Collections.singletonList(KerasParameterConstant.METRICS)
-                                , args));
+                        , Collections.singletonList(KerasParameterConstant.METRICS)
+                        , args));
     }
 
     public static String makeModelFitScript(JsonObject args, List<KerasFlowOutputNode> outputNodes) throws Exception {
+        return makeModelFitScript(args, outputNodes, "");
+    }
+
+    public static String makeModelFitScript(JsonObject args, List<KerasFlowOutputNode> outputNodes, String indent) throws Exception {
         String dataString = makeModelFitDataDictionaryString(outputNodes);
         String arguments = makeModelFitArgumentsString(args);
 
-        return String.format("model.fit(%s%s)", dataString, arguments);
+        return String.format("%smodel.fit(%s%s)", indent, dataString, arguments);
     }
 
     public static String makeModelFitScriptWithCallbacks(JsonObject args, List<KerasFlowOutputNode> outputNodes, List<String> callbacks) throws Exception {
@@ -338,8 +352,9 @@ public class KerasScriptUtil {
     }
 
     private static String makeModelFitArgumentsString(JsonObject args) throws Exception {
+        @SuppressWarnings("unchecked")
         String arguments = PythonScriptUtil.makePythonArgumentsString(
-                new ArrayList<>()
+                ListUtils.EMPTY_LIST
                 , Arrays.asList(KerasParameterConstant.BATCH_SIZE, KerasParameterConstant.EPOCHS)
                 , args);
 
@@ -351,8 +366,9 @@ public class KerasScriptUtil {
     }
 
     private static String makeModelFitGeneratorArgumentsString(JsonObject args) throws Exception {
+        @SuppressWarnings("unchecked")
         String arguments = PythonScriptUtil.makePythonArgumentsString(
-        		new ArrayList<>()
+                ListUtils.EMPTY_LIST
                 , Arrays.asList(KerasParameterConstant.STEPS_PER_EPOCH, KerasParameterConstant.EPOCHS, KerasParameterConstant.VALIDATION_STEPS)
                 , args);
 
@@ -363,7 +379,7 @@ public class KerasScriptUtil {
         return arguments;
     }
 
-    static String makeAddSystemPathBrighticsModulesDir() {
+    public static String makeAddSystemPathBrighticsModulesDir() {
         StringJoiner script = new StringJoiner(LINE_SEPARATOR);
 
         script.add("import sys");
@@ -426,4 +442,18 @@ public class KerasScriptUtil {
 
         return script.toString();
     }
+
+
+    public static String makeOPTScript(String script0) {
+        StringJoiner script = new StringJoiner(LINE_SEPARATOR);
+
+        script.add("from hyperopt import Trials, STATUS_OK, tpe");
+        script.add("from hyperas import optim");
+        script.add("from hyperas.distributions import choice, uniform");
+        script.add(script0);
+        script.add("best_run, best_model = optim.minimize(model, data=data, algo=tpe.suggest, max_evals=5, trials=Trials())");
+        script.add("    X_train, Y_train, X_train, Y_train = data()");
+        return script.toString();
+    }
+
 }

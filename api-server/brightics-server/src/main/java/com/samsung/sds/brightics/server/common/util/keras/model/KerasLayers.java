@@ -1,21 +1,16 @@
 package com.samsung.sds.brightics.server.common.util.keras.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
 import com.google.gson.JsonObject;
+import com.samsung.sds.brightics.common.core.exception.BrighticsCoreException;
 import com.samsung.sds.brightics.server.common.util.keras.PythonScriptUtil;
 import org.apache.commons.lang3.EnumUtils;
-
-import com.samsung.sds.brightics.common.core.exception.BrighticsCoreException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import java.util.*;
 
 public interface KerasLayers {
 
-    List<KerasParameters> EMPTY_LIST = new ArrayList<>();
+    List<KerasParameters> emptyList = new ArrayList<>();
 
     String getModuleName();
     String getClassName();
@@ -67,7 +62,7 @@ enum CoreLayers implements KerasLayers {
     Dense("Dense", Collections.singletonList(KerasParameterConstant.UNITS), Collections.singletonList(KerasParameterConstant.ACTIVATION)),
     Activation("Activation", Collections.singletonList(KerasParameterConstant.ACTIVATION)),
     Dropout("Dropout", Collections.singletonList(KerasParameterConstant.RATE)),
-    Flatten("Flatten", EMPTY_LIST),
+    Flatten("Flatten", emptyList),
     Reshape("Reshape", Collections.singletonList(KerasParameterConstant.TARGET_SHAPE)),
     Lambda("Lambda"
             , Collections.singletonList(new KerasParameters("function", PythonTypes.STATEMENTS))
@@ -75,14 +70,14 @@ enum CoreLayers implements KerasLayers {
                     , new KerasParameters("mask", PythonTypes.STR)
                     , new KerasParameters("arguments", PythonTypes.STR)));
 
-    private static final String moduleName = "keras.layers.core";
+    private static final String MODULE_NAME = "keras.layers.core";
 
     private String className;
     private List<KerasParameters> requiredParams;
     private List<KerasParameters> optionalParams;
 
     CoreLayers(String className, List<KerasParameters> requiredParams) {
-        this(className, requiredParams, EMPTY_LIST);
+        this(className, requiredParams, emptyList);
     }
 
     CoreLayers(String className, List<KerasParameters> requiredParams, List<KerasParameters> optionalParams) {
@@ -93,7 +88,7 @@ enum CoreLayers implements KerasLayers {
 
     @Override
     public String getModuleName() {
-        return moduleName;
+        return MODULE_NAME;
     }
 
     @Override
@@ -181,22 +176,22 @@ enum ConvolutionalLayers implements KerasLayers {
             KerasParameterConstant.BIAS_CONSTRAINT)),
 
     UpSampling1D("UpSampling1D"
-            , Collections.singletonList(new KerasParameters("size", PythonTypes.NUMBER)), EMPTY_LIST),
+            , Collections.singletonList(new KerasParameters("size", PythonTypes.NUMBER)), emptyList),
     UpSampling2D("UpSampling2D"
            , Collections.singletonList(KerasParameterConstant.SIZE), Arrays.asList(KerasParameterConstant.DATA_FORMAT)),
     UpSampling3D("UpSampling3D"
             , Collections.singletonList(KerasParameterConstant.SIZE), Collections.singletonList(KerasParameterConstant.DATA_FORMAT)),
 
-    Cropping1D("Cropping1D", Collections.singletonList(KerasParameterConstant.CROPPING), EMPTY_LIST),
+    Cropping1D("Cropping1D", Collections.singletonList(KerasParameterConstant.CROPPING), emptyList),
     Cropping2D("Cropping2D", Collections.singletonList(KerasParameterConstant.CROPPING), Collections.singletonList(KerasParameterConstant.DATA_FORMAT)),
     Cropping3D("Cropping3D", Collections.singletonList(KerasParameterConstant.CROPPING), Collections.singletonList(KerasParameterConstant.DATA_FORMAT)),
 
-    ZeroPadding1D("ZeroPadding1D", Collections.singletonList(new KerasParameters("padding", PythonTypes.NUMBER)), EMPTY_LIST),
+    ZeroPadding1D("ZeroPadding1D", Collections.singletonList(new KerasParameters("padding", PythonTypes.NUMBER)), emptyList),
     ZeroPadding2D("ZeroPadding2D", Collections.singletonList(new KerasParameters("padding", PythonTypes.TUPLE)), Collections.singletonList(KerasParameterConstant.DATA_FORMAT)),
     ZeroPadding3D("ZeroPadding3D", Collections.singletonList(new KerasParameters("padding", PythonTypes.TUPLE)), Collections.singletonList(KerasParameterConstant.DATA_FORMAT));
 
 
-    private static final String moduleName = "keras.layers.convolutional";
+    private static final String MODULE_NAME = "keras.layers.convolutional";
 
     private String className;
     private List<KerasParameters> requiredParams;
@@ -210,7 +205,7 @@ enum ConvolutionalLayers implements KerasLayers {
 
     @Override
     public String getModuleName() {
-        return moduleName;
+        return MODULE_NAME;
     }
 
     @Override
@@ -236,12 +231,12 @@ enum ConvolutionalLayers implements KerasLayers {
 
 enum PoolingLayers implements KerasLayers {
 
-    MaxPooling1D("MaxPooling1D",Arrays.asList(new KerasParameters("pool_size", PythonTypes.NUMBER), new KerasParameters("strides", PythonTypes.NUMBER), KerasParameterConstant.PADDING), EMPTY_LIST),
+    MaxPooling1D("MaxPooling1D",Arrays.asList(new KerasParameters("pool_size", PythonTypes.NUMBER), new KerasParameters("strides", PythonTypes.NUMBER), KerasParameterConstant.PADDING), emptyList),
     MaxPooling2D("MaxPooling2D",Arrays.asList(KerasParameterConstant.POOL_SIZE, KerasParameterConstant.STRIDES, KerasParameterConstant.PADDING), Collections.singletonList(KerasParameterConstant.DATA_FORMAT)),
     AveragePooling2D("AveragePooling2D",Arrays.asList(KerasParameterConstant.POOL_SIZE, KerasParameterConstant.STRIDES, KerasParameterConstant.PADDING), Collections.singletonList(KerasParameterConstant.DATA_FORMAT)),
-    GlobalAveragePooling2D("GlobalAveragePooling2D", EMPTY_LIST, Collections.singletonList(KerasParameterConstant.DATA_FORMAT));
+    GlobalAveragePooling2D("GlobalAveragePooling2D", emptyList, Collections.singletonList(KerasParameterConstant.DATA_FORMAT));
 
-    private static final String moduleName = "keras.layers.pooling";
+    private static final String MODULE_NAME = "keras.layers.pooling";
 
     private String className;
     private List<KerasParameters>requiredParams;
@@ -255,7 +250,7 @@ enum PoolingLayers implements KerasLayers {
 
     @Override
     public String getModuleName() {
-        return moduleName;
+        return MODULE_NAME;
     }
 
     @Override
@@ -308,7 +303,7 @@ enum RecurrentLayers implements KerasLayers {
                     , KerasParameterConstant.BIAS_CONSTRAINT, KerasParameterConstant.DROPOUT, KerasParameterConstant.RECURRENT_DROPOUT)
             );
 
-    private static final String moduleName = "keras.layers.recurrent";
+    private static final String MODULE_NAME = "keras.layers.recurrent";
 
     private String className;
     private List<KerasParameters> requiredParams;
@@ -322,7 +317,7 @@ enum RecurrentLayers implements KerasLayers {
 
     @Override
     public String getModuleName() {
-        return moduleName;
+        return MODULE_NAME;
     }
 
     @Override
@@ -354,7 +349,7 @@ enum EmbeddingsLayers implements KerasLayers {
                     KerasParameterConstant.EMBEDDINGS_REGULARIZER, KerasParameterConstant.ACTIVITY_REGULARIZER,
                     KerasParameterConstant.EMBEDDINGS_CONSTRAINT, KerasParameterConstant.MASK_ZERO));
 
-    private static final String moduleName = "keras.layers.embeddings";
+    private static final String MODULE_NAME = "keras.layers.embeddings";
 
     private String className;
     private List<KerasParameters> requiredParams;
@@ -368,7 +363,7 @@ enum EmbeddingsLayers implements KerasLayers {
 
     @Override
     public String getModuleName() {
-        return moduleName;
+        return MODULE_NAME;
     }
 
     @Override
@@ -394,10 +389,10 @@ enum EmbeddingsLayers implements KerasLayers {
 
 enum MergeLayers implements KerasLayers {
 
-    Add("Add", EMPTY_LIST, EMPTY_LIST),
-    Concatenate("Concatenate", EMPTY_LIST, Collections.singletonList(KerasParameterConstant.AXIS));
+    Add("Add", emptyList, emptyList),
+    Concatenate("Concatenate", emptyList, Collections.singletonList(KerasParameterConstant.AXIS));
 
-    private static final String moduleName = "keras.layers.merge";
+    private static final String MODULE_NAME = "keras.layers.merge";
 
     private String className;
     private List<KerasParameters> requiredParams;
@@ -411,7 +406,7 @@ enum MergeLayers implements KerasLayers {
 
     @Override
     public String getModuleName() {
-        return moduleName;
+        return MODULE_NAME;
     }
 
     @Override
@@ -436,10 +431,10 @@ enum MergeLayers implements KerasLayers {
 }
 
 enum AdvancedActivationsLayers implements KerasLayers {
-    LeakyReLU("LeakyReLU", EMPTY_LIST, Collections.singletonList(KerasParameterConstant.ALPHA)),
-    ELU("ELU", EMPTY_LIST, Collections.singletonList(KerasParameterConstant.ALPHA));
+    LeakyReLU("LeakyReLU", emptyList, Collections.singletonList(KerasParameterConstant.ALPHA)),
+    ELU("ELU", emptyList, Collections.singletonList(KerasParameterConstant.ALPHA));
 
-    private static final String moduleName = "keras.layers.advanced_activations";
+    private static final String MODULE_NAME = "keras.layers.advanced_activations";
 
     private String className;
     private List<KerasParameters> requiredParams;
@@ -453,7 +448,7 @@ enum AdvancedActivationsLayers implements KerasLayers {
 
     @Override
     public String getModuleName() {
-        return moduleName;
+        return MODULE_NAME;
     }
 
     @Override
@@ -487,7 +482,7 @@ enum NormalizationLayers implements KerasLayers {
                     KerasParameterConstant.BETA_REGULARIZER, KerasParameterConstant.GAMMA_REGULARIZER,
                     KerasParameterConstant.BETA_CONSTRAINT, KerasParameterConstant.GAMMA_CONSTRAINT));
 
-    private static final String moduleName = "keras.layers";
+    private static final String MODULE_NAME = "keras.layers";
 
     private String className;
     private List<KerasParameters> requiredParams;
@@ -501,7 +496,7 @@ enum NormalizationLayers implements KerasLayers {
 
     @Override
     public String getModuleName() {
-        return moduleName;
+        return MODULE_NAME;
     }
 
     @Override
@@ -530,7 +525,7 @@ enum LayerWrappers implements KerasLayers {
             , Collections.singletonList(new KerasParameters("layer", PythonTypes.STATEMENTS))
             , Arrays.asList(new KerasParameters("merge_mode", PythonTypes.STR), new KerasParameters("weights", PythonTypes.TUPLE))); // XXX What is the type of weights?
 
-    private static final String moduleName = "keras.layers.wrappers";
+    private static final String MODULE_NAME = "keras.layers.wrappers";
 
     private String className;
     private List<KerasParameters> requiredParams;
@@ -544,7 +539,7 @@ enum LayerWrappers implements KerasLayers {
 
     @Override
     public String getModuleName() {
-        return moduleName;
+        return MODULE_NAME;
     }
 
     @Override
@@ -574,7 +569,7 @@ enum TextPreprocessing implements KerasLayers {
             Arrays.asList(KerasParameterConstant.FILTERS_STR, KerasParameterConstant.LOWER,
                     KerasParameterConstant.SPLIT));
 
-    private static final String moduleName = "keras.preprocessing.text";
+    private static final String MODULE_NAME = "keras.preprocessing.text";
 
     private String className;
     private List<KerasParameters> requiredParams;
@@ -588,7 +583,7 @@ enum TextPreprocessing implements KerasLayers {
 
     @Override
     public String getModuleName() {
-        return moduleName;
+        return MODULE_NAME;
     }
 
     @Override
@@ -613,15 +608,15 @@ enum TextPreprocessing implements KerasLayers {
 }
 
 enum Applications implements KerasLayers {
-    InceptionV3("InceptionV3", EMPTY_LIST, Arrays.asList(KerasParameterConstant.INCLUDE_TOP, KerasParameterConstant.WEIGHTS, KerasParameterConstant.INPUT_SHAPE)),
-    InceptionResNetV2("InceptionResNetV2", EMPTY_LIST, Arrays.asList(KerasParameterConstant.INCLUDE_TOP, KerasParameterConstant.WEIGHTS, KerasParameterConstant.INPUT_SHAPE)),
+    InceptionV3("InceptionV3", emptyList, Arrays.asList(KerasParameterConstant.INCLUDE_TOP, KerasParameterConstant.WEIGHTS, KerasParameterConstant.INPUT_SHAPE)),
+    InceptionResNetV2("InceptionResNetV2", emptyList, Arrays.asList(KerasParameterConstant.INCLUDE_TOP, KerasParameterConstant.WEIGHTS, KerasParameterConstant.INPUT_SHAPE)),
 
     VGG16("VGG16", Arrays.asList(KerasParameterConstant.INCLUDE_TOP, KerasParameterConstant.WEIGHTS),
             Arrays.asList(KerasParameterConstant.INPUT_TENSOR, KerasParameterConstant.INPUT_SHAPE, KerasParameterConstant.POOLING, KerasParameterConstant.CLASSES)),
     ResNet50("ResNet50", Arrays.asList(KerasParameterConstant.INCLUDE_TOP, KerasParameterConstant.WEIGHTS),
             Arrays.asList(KerasParameterConstant.INPUT_TENSOR, KerasParameterConstant.INPUT_SHAPE, KerasParameterConstant.POOLING, KerasParameterConstant.CLASSES));
 
-    private static final String moduleName = "keras.applications";
+    private static final String MODULE_NAME = "keras.applications";
 
     private String className;
     private List<KerasParameters> requiredParams;
@@ -635,7 +630,7 @@ enum Applications implements KerasLayers {
 
     @Override
     public String getModuleName() {
-        return moduleName;
+        return MODULE_NAME;
     }
 
     @Override

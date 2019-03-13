@@ -1,11 +1,10 @@
 package com.samsung.sds.brightics.server.common.util.keras.flow;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.gson.JsonObject;
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.gson.JsonObject;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class KerasFlowNode {
 

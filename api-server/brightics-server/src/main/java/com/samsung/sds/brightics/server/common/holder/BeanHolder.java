@@ -1,5 +1,6 @@
 package com.samsung.sds.brightics.server.common.holder;
 
+import com.samsung.sds.brightics.server.service.*;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -8,12 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import com.samsung.sds.brightics.server.common.message.MessageManagerProvider;
-import com.samsung.sds.brightics.server.service.DataService;
-import com.samsung.sds.brightics.server.service.DataSourceService;
-import com.samsung.sds.brightics.server.service.JobStatusService;
-import com.samsung.sds.brightics.server.service.MetadataConverterService;
-import com.samsung.sds.brightics.server.service.PyFunctionService;
-import com.samsung.sds.brightics.server.service.TaskService;
 
 @Component
 public final class BeanHolder implements ApplicationContextAware {
@@ -26,6 +21,9 @@ public final class BeanHolder implements ApplicationContextAware {
 
 	@Autowired
 	public TaskService taskService;
+
+    @Autowired
+    public DeeplearningService deeplearningService;
 
 	@Autowired
 	public MessageManagerProvider messageManager;

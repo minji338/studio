@@ -4,7 +4,9 @@ import com.google.gson.JsonObject;
 import com.samsung.sds.brightics.server.common.util.keras.model.KerasLayers;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * For Layers have inner layer as listed below
@@ -35,16 +37,21 @@ public class KerasFlowWrapperNode extends KerasFlowLayerNode {
         }
     }
 
+    @Override
     public boolean hasScript() {
         return innerParam.get("script") != null && StringUtils.isNotBlank(innerParam.get("script").getAsString());
     }
 
-    public String getScript() {
+    @Override
+    public String getScript(String indent) {
         if (!hasScript()) {
             return StringUtils.EMPTY;
         }
 
-        return LINE_SEPARATOR + innerParam.get("script").getAsString() + LINE_SEPARATOR;
+        String script = innerParam.get("script").getAsString();
+        return LINE_SEPARATOR
+                + Arrays.stream(script.split(LINE_SEPARATOR)).map(line -> indent + line).collect(Collectors.joining(LINE_SEPARATOR))
+                + LINE_SEPARATOR;
     }
 
     public Optional<KerasLayers> getInnerLayer() {

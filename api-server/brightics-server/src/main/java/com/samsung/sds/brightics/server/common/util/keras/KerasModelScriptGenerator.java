@@ -17,11 +17,9 @@ public abstract class KerasModelScriptGenerator {
 
     protected StringJoiner script = new StringJoiner(System.lineSeparator());
 
-    String jid;
-
-    JsonObject param;
-
-    KerasModelFlow modelFlowData;
+    protected String jid;
+    protected JsonObject param;
+    protected KerasModelFlow modelFlowData;
 
     public KerasModelScriptGenerator(JsonObject model) throws Exception {
         this(model, StringUtils.EMPTY);
@@ -106,27 +104,27 @@ public abstract class KerasModelScriptGenerator {
         return script.toString();
     }
 
-    private void clearScript() {
+    protected void clearScript() {
         script = new StringJoiner(System.lineSeparator());
     }
 
-    private void addSequentialImport() {
+    protected void addSequentialImport() {
         script.add("from keras.models import Sequential");
     }
 
-    private void addFunctionalImport() {
+    protected void addFunctionalImport() {
         script.add("from keras.models import Input, Model");
     }
 
-    private void addLayersImport() {
+    protected void addLayersImport() {
         script.add(KerasScriptUtil.makeLayersImportScript(modelFlowData.getLayerSet())).add(StringUtils.EMPTY);
     }
 
-    private void addSequentialModel() {
+    protected void addSequentialModel() {
         script.add(KerasScriptUtil.makeSequentialModelScript(modelFlowData)).add(StringUtils.EMPTY);
     }
 
-    private void addFunctionalModel() throws Exception {
+    protected void addFunctionalModel() throws Exception {
         script.add(KerasScriptUtil.makeFunctionalModelScript(modelFlowData)).add(StringUtils.EMPTY);
     }
 

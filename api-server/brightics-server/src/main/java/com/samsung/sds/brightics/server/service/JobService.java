@@ -128,13 +128,13 @@ public class JobService {
     }
 
     public Map<String, Object> terminateJob(String jobId) {
-        if (jobRepository.dlJobIdAsTaskid.containsKey(jobId)) {
-            List<String> dljobList = jobRepository.dlJobIdAsTaskid.get(jobId);
+        if (jobRepository.isContainDLJob(jobId)) {
+            List<String> dljobList = jobRepository.getDLTaskIds(jobId);
             for (String taskId : dljobList) {
                 //TODO add DL stop
                 beanHolder.taskService.stopTask(taskId, "DLPythonScript", "python");
             }
-            jobRepository.dlJobIdAsTaskid.remove(jobId);
+            jobRepository.removeDLJob(jobId);
         } else {
             JobModelExecuteService.cancelJob(jobId);
         }

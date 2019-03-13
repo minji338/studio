@@ -1,17 +1,16 @@
 package com.samsung.sds.brightics.server.common.util.keras.flow;
 
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.samsung.sds.brightics.common.core.exception.BrighticsCoreException;
 import com.samsung.sds.brightics.server.common.util.keras.PythonScriptUtil;
 import com.samsung.sds.brightics.server.common.util.keras.model.KerasLayers;
 import com.samsung.sds.brightics.server.common.util.keras.model.KerasParameterConstant;
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class KerasFlowLayerNode extends KerasFlowModelNode {
 
@@ -173,8 +172,8 @@ public class KerasFlowLayerNode extends KerasFlowModelNode {
 
             return JsonParamUtil.mergeParam(param, "input_shape", dataNode.getInputShape());
         } else if (isLastLayer()) {
-            KerasFlowDataNode dataNode = getOutputNode().getTrainDataNode();
-            String outputLayerName = dataNode.getOutputLayerName();
+            KerasFlowDataNode kerasFlowDataNode = getOutputNode().getTrainDataNode();
+            String outputLayerName = kerasFlowDataNode.getOutputLayerName();
 
             return JsonParamUtil.mergeParam(param, "name", outputLayerName);
         }
