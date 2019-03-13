@@ -59,8 +59,7 @@ public class DeeplearningService {
 	@Autowired
 	private MessageManagerProvider messageManager;
 
-
-	@Value("${brightics.dl.repo.path:/home/ec2-user/brightics-studio/brightics-server/dl}")
+	@Value("${brightics.dl.repo.path:./dl}")
 	private String DL_HOME;
 
 	private static final String LOG_PATH = "/log/";

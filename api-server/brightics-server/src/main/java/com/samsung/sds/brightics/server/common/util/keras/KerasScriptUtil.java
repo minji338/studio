@@ -36,7 +36,7 @@ public class KerasScriptUtil {
     private static final String CHECKPOINT_DIR = "/checkpoint/";
 
     public static String getDLHomePath() {
-        String dlhome = "/home/ec2-user/brightics-studio/brightics-server/dl";
+        String dlhome = "../../dl";
         Config configObject = ConfigFactory.load();
         try {
             if (configObject.getString("brightics.dl.repo.path") != null) {
