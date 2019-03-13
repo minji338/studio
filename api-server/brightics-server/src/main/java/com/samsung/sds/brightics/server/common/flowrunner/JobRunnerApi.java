@@ -54,8 +54,7 @@ public class JobRunnerApi extends AbsJobRunnerApi {
 
 	@Override
 	public void executeDLScript(JsonObject model, String jid) {
-		//TODO do nothing
-//		BeanHolder.getBeanHolder().deeplearningService.executeDLScript(model, jid);
+		BeanHolder.getBeanHolder().deeplearningService.executeDLScript(model, jid);
 	}
 
 }
