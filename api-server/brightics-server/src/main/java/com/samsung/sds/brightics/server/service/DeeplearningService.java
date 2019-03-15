@@ -194,7 +194,9 @@ public class DeeplearningService {
 	}
 
 	private Object makePathRelative(String result) {
-		return result.replaceAll("\"path\"[\\s]*:[\\s]*\"" + DL_HOME, "\"path\":\"");
+		return result
+				.replaceAll("\\\\\\\\", "/")
+				.replaceAll("\"path\"[\\s]*:[\\s]*\"" + DL_HOME, "\"path\":\"");
 	}
 
 	private Object formatDLFailResult(String jid, String message, String detailMessage) {

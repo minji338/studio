@@ -120,8 +120,8 @@ enum LoadType {
                 trainLabel = Paths.get(dlHomePath, trainLabel).toString();
             }
 
-            String data = String.format("%s = np.load(\"\"\"%s\"\"\")", node.getDataVariableName(), trainData);
-            String label = String.format("%s = np.load(\"\"\"%s\"\"\")", node.getLabelVariableName(), trainLabel);
+            String data = String.format("%s = np.load(r\"\"\"%s\"\"\")", node.getDataVariableName(), trainData);
+            String label = String.format("%s = np.load(r\"\"\"%s\"\"\")", node.getLabelVariableName(), trainLabel);
             return data + LINE_SEPARATOR + label;
         }
 

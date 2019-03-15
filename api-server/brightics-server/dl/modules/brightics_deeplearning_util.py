@@ -10,7 +10,7 @@ def make_checkpoint_dir(checkpoint_dir, user, checkpoint):
         os.mkdir(user_path)
     elif os.path.exists(ckpt_path):
         ckpt_path += '_'
-        ckpt_path += '{:%Y%m%d_%H:%M:%S}'.format(datetime.now())
+        ckpt_path += '{:%Y%m%d_%H%M%S}'.format(datetime.now())
 
     os.mkdir(ckpt_path)
     return ckpt_path
