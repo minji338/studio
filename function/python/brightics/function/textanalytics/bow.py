@@ -40,11 +40,11 @@ def _bow(table, input_col, add_words=None, no_below=1, no_above=0.8, keep_n=1000
     params = { 
         'Input Column': input_col,
         'Add Words to Bag': add_words,
-        'Minimum Number of Occurence': no_below,
-        'Maximum Fraction of Occurence': no_above,
+        'Minimum Number of Occurrence': no_below,
+        'Maximum Fraction of Occurrence': no_above,
         'Keep N most Frequent': keep_n,
         'Keep Tokens': keep_tokens,
-        'Remove N most Frequnt' : remove_n
+        'Remove N most Frequent' : remove_n
     }
     
     rb = BrtcReprBuilder()
