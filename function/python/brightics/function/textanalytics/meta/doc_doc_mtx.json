@@ -9,7 +9,7 @@
         "name": "brightics.function.textanalytics$doc_doc_mtx",
         "context": "python",
         "label": "Document-document Matrix",
-        "description": "",
+        "description": "A document-document matrix is a square matrix, where each cell represents the number of common terms that two documents both contain.",
         "tags": [],
         "version": "3.6",
         "inputs": {

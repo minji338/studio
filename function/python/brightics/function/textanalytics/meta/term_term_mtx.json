@@ -9,7 +9,7 @@
         "name": "brightics.function.textanalytics$term_term_mtx",
         "context": "python",
         "label": "Term-term Matrix",
-        "description": "",
+        "description": "A term-term matrix is a square matrix, where each cell represents how many documents that contain the two term.",
         "tags": [],
         "version": "3.6",
         "inputs": {
